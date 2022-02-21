@@ -39,7 +39,7 @@ int main(void){
         int clientSockfd = c.connectFromClient(); 
         c.sendFromClient(clientSockfd, requestLines);
 	Request input(clientText);
-	cout << "@@@@@@ request: " <<input.getRequestHeader() << "@@@@@@@" << endl;
+	cout << "@@@@@@ request: " <<input.getRequestLines() << "@@@@@@@" << endl;
         if(method==0 || method==1){
 	  cout <<"Logfile: "<< input.getRequestLine() << " from " << clientIpAddr.data() << " @ " << currentTime() << endl;
 	  if(cache.inCache(input)) {
@@ -49,10 +49,10 @@ int main(void){
 	    if(rsp.needRevalidation()) {
                     rsp = cache.revalidation(input, rsp, clientSockfd);
                 }
-                else {
-                    //logfile
-                    cout << "in cache, valid" <<endl;
-                }
+            else {
+               //logfile
+               cout << "in cache, valid" <<endl;
+            }
                 send(accServerfd, rsp.getResponse().data(), rsp.getResponse().size(), 0);
 	  }
 	  else{

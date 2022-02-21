@@ -61,6 +61,7 @@ bool Response::is_no_cache() {
   if(cc == "") return false;
   int p = cc.find("no-cache");
   if(p == -1) return false;
+  std::cout << "in cache, requires validation" << std::endl;
   return true;
 
 }

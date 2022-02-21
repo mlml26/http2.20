@@ -21,14 +21,13 @@ using namespace std;
 class Request{
 private:
     string requestLine;
-    string requestHeader;//full 
+    string requestLines;//full 
     
 public:
     Request(){}
     Request(const Request& rhs) {
         requestLine = rhs.requestLine;
-        requestHeader = rhs.requestHeader;
-    }
+        requestLines = rhs.requestLines;   }
 //    Response(const Response& rhs) {
 //        header = rhs.header;
 //        fulltext = rhs.fulltext;
@@ -36,8 +35,8 @@ public:
     string getRequestLine(){
         return requestLine;
     }
-    string getRequestHeader(){
-        return requestHeader;
+    string getRequestLines(){
+        return requestLines;
     }
     // GET http://www.testingmcafeesites.com/index.html HTTP/1.1
         // User-Agent: PostmanRuntime/7.29.0
@@ -55,13 +54,13 @@ public:
 //    client_sockfd=5
     //requestServerInfo:requestLine
     Request(vector<char> header) {
-        requestHeader.insert(requestHeader.begin(), header.begin(), header.end());
-        int pos = requestHeader.find("\r\n");
-        requestLine = requestHeader.substr(0, pos);
+        requestLines.insert(requestLines.begin(), header.begin(), header.end());
+        int pos = requestLines.find("\r\n");
+        requestLine = requestLines.substr(0, pos);
     }
     Request(string line, string header) {
         requestLine.insert(requestLine.begin(), line.begin(), line.end());
-        requestHeader.insert(requestHeader.begin(), header.begin(), header.end());
+        requestLines.insert(requestLines.begin(), header.begin(), header.end());
     }
     string getMethod() {
         int pos = requestLine.find(" ");
@@ -72,7 +71,16 @@ public:
         int p2 = requestLine.find(" ", p1 + 1);
         return requestLine.substr(p1+1, p2-p1-1);
     }
+  string getHost(){
     
+    int p1 = getURL().find("http://");
+    p1 = (p1 == -1) ? 0 : p1+7;
+    int p2 = getURL().find("/", p1+1);
+    if(p2 == -1) {//no file
+      return getURL().substr(p1);
+    }
+    else return getURL().substr(p1, p2-p1);
+  }    
 };
 
 

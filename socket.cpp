@@ -93,6 +93,7 @@ std::vector<std::vector<char> > Server::acceptProcessFromServer(int server_sockf
     // full_client_text.insert(full_client_text.end(), client_text, client_text+ret_recv);
     // full_client_text.push_back('\0');
     std::vector<char> full_client_text(client_text, client_text+ret_recv);
+    //    full_client_text.push_back('\0');
     std::cout << "from client: " << full_client_text.data() << "\n";
     acceptInfo.push_back(full_client_text); //full_client_text: 0
 

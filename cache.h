@@ -141,32 +141,32 @@ public:
     Response revalidation(Request input, Response rsp, int socket){
         string etag = rsp.getEtag();
         string lastModify = rsp.getLastModify();
-        string newinput = input.getRequestHeader();
+        string newinput = input.getRequestLines();
         //1. if has etag, send "if-none-match"
-        if(etag != "") {
+	if(etag != "") {
             //string add = "If-None-Match: " + etag + string("\r\n");
             //replacedInput.insert(replacedInput.end() - 2, add.begin(), add.end());
             string adder = string("If-None-Match: ") + etag + string("\r\n");
             cout << etag << endl;
             newinput = newinput.insert(newinput.length()-2, adder);
             //send(socket,message.data(),message.size()+1,0);
-          cout << "Newinput :  \n" << newinput.data() << endl;  
+	    //  cout << "Newinput :  \n" << newinput.data() << endl;  
         }
         //2. if has last-modify, send if-modified-since
         if(lastModify != "") {
-            string adder = string("If-Modified-Since: ") + lastModify + string("\r\n");
+            string adder = string("If-Modified-Since: ") + lastModify + string("\r\n\r\n");
             newinput = newinput.insert(newinput.length()-2, adder);
             //replacedInput = input + string("\r\n") + string("If-Modified-Since: ") + lastModify + string("\r\n");
             
-        }
+	    }
         cout << "Newinput :  \n" << newinput.data() << endl;
-        
-        int send_flag = send(socket, newinput.data(), newinput.size(), 0);
+        const char * newinput_ch = newinput.c_str();
+        int send_flag = send(socket, newinput_ch, strlen(newinput_ch), 0);
 	if(send_flag <= 0) {
 	  cout << "failed to send the new request." << endl;
 	  exit(EXIT_FAILURE);
 	}
-	cout << "Requesting “" << input.getRequestLine() << "” from " << input.getURL() << endl;
+	cout << "Requesting “" << input.getRequestLine() << "” from " << input.getHost() << endl;
         //recieve new response
 	/*        vector<char> v;
 	v.resize(65536);
@@ -189,23 +189,24 @@ public:
        std::vector<char> v_responseHeader(responseHeader.begin(), responseHeader.end());
        //proxy_responseInfo.push_back(v_responseHeader);
        std::vector<char> full_text;
+       cout << "^^^^^^^^^^^^^^New response: \n" << endl;
        do {
             std::cout << "recv_flag: " << recv_flag << "\n";
             sum += recv_flag;
             //server_text.resize(ret_recv);
             //send(server_sockfd, server_text, recv_flag, 0);
-            //std::cout << server_text;
+	    //            std::cout << server_text;
             full_text.insert(full_text.end(), server_text, server_text+recv_flag);
             memset(server_text,'\0',MAX_TEXTLEN); //清零
         } while((recv_flag=recv(socket, server_text, MAX_TEXTLEN, 0))>0);
 
 	
-	cout << "^^^^^^^^^^^^^^New response: \n" << full_text.data() << "^^^^^^^^^^^^^^^^" <<endl;
+       cout << "^^^^^^^^^^^^^^New response: \n" << full_text.data() << "^^^^^^^^^^^^^^^^" <<endl;
 	// Response newResponse(v);
         Response new_rsp(full_text);
-        cout << "Received “" << new_rsp.getRspFirstLine() << "” from " << input.getURL() << endl;
+        cout << "Received “" << new_rsp.getRspFirstLine() << "” from " << input.getHost() << endl;
         if(new_rsp.getStatus() == "304") {
-            return rsp;
+	  return rsp;
         }
         else{
 	    storeResponse(input, new_rsp);//input: Request, Response
