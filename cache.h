@@ -141,15 +141,22 @@ public:
     Response revalidation(Request input, Response rsp, int socket){
         string etag = rsp.getEtag();
         string lastModify = rsp.getLastModify();
+<<<<<<< HEAD
         string newinput = input.getRequestLines();
         //1. if has etag, send "if-none-match"
 	if(etag != "") {
+=======
+        string newinput = input.getRequestHeader();
+        //1. if has etag, send "if-none-match"
+        if(etag != "") {
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
             //string add = "If-None-Match: " + etag + string("\r\n");
             //replacedInput.insert(replacedInput.end() - 2, add.begin(), add.end());
             string adder = string("If-None-Match: ") + etag + string("\r\n");
             cout << etag << endl;
             newinput = newinput.insert(newinput.length()-2, adder);
             //send(socket,message.data(),message.size()+1,0);
+<<<<<<< HEAD
 	    //  cout << "Newinput :  \n" << newinput.data() << endl;  
         }
         //2. if has last-modify, send if-modified-since
@@ -162,11 +169,29 @@ public:
         cout << "Newinput :  \n" << newinput.data() << endl;
         const char * newinput_ch = newinput.c_str();
         int send_flag = send(socket, newinput_ch, strlen(newinput_ch), 0);
+=======
+          cout << "Newinput :  \n" << newinput.data() << endl;  
+        }
+        //2. if has last-modify, send if-modified-since
+        if(lastModify != "") {
+            string adder = string("If-Modified-Since: ") + lastModify + string("\r\n");
+            newinput = newinput.insert(newinput.length()-2, adder);
+            //replacedInput = input + string("\r\n") + string("If-Modified-Since: ") + lastModify + string("\r\n");
+            
+        }
+        cout << "Newinput :  \n" << newinput.data() << endl;
+        
+        int send_flag = send(socket, newinput.data(), newinput.size(), 0);
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
 	if(send_flag <= 0) {
 	  cout << "failed to send the new request." << endl;
 	  exit(EXIT_FAILURE);
 	}
+<<<<<<< HEAD
 	cout << "Requesting “" << input.getRequestLine() << "” from " << input.getHost() << endl;
+=======
+	cout << "Requesting “" << input.getRequestLine() << "” from " << input.getURL() << endl;
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
         //recieve new response
 	/*        vector<char> v;
 	v.resize(65536);
@@ -189,24 +214,40 @@ public:
        std::vector<char> v_responseHeader(responseHeader.begin(), responseHeader.end());
        //proxy_responseInfo.push_back(v_responseHeader);
        std::vector<char> full_text;
+<<<<<<< HEAD
        cout << "^^^^^^^^^^^^^^New response: \n" << endl;
+=======
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
        do {
             std::cout << "recv_flag: " << recv_flag << "\n";
             sum += recv_flag;
             //server_text.resize(ret_recv);
             //send(server_sockfd, server_text, recv_flag, 0);
+<<<<<<< HEAD
 	    //            std::cout << server_text;
+=======
+            //std::cout << server_text;
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
             full_text.insert(full_text.end(), server_text, server_text+recv_flag);
             memset(server_text,'\0',MAX_TEXTLEN); //清零
         } while((recv_flag=recv(socket, server_text, MAX_TEXTLEN, 0))>0);
 
 	
+<<<<<<< HEAD
        cout << "^^^^^^^^^^^^^^New response: \n" << full_text.data() << "^^^^^^^^^^^^^^^^" <<endl;
 	// Response newResponse(v);
         Response new_rsp(full_text);
         cout << "Received “" << new_rsp.getRspFirstLine() << "” from " << input.getHost() << endl;
         if(new_rsp.getStatus() == "304") {
 	  return rsp;
+=======
+	cout << "^^^^^^^^^^^^^^New response: \n" << full_text.data() << "^^^^^^^^^^^^^^^^" <<endl;
+	// Response newResponse(v);
+        Response new_rsp(full_text);
+        cout << "Received “" << new_rsp.getRspFirstLine() << "” from " << input.getURL() << endl;
+        if(new_rsp.getStatus() == "304") {
+            return rsp;
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
         }
         else{
 	    storeResponse(input, new_rsp);//input: Request, Response

@@ -21,13 +21,22 @@ using namespace std;
 class Request{
 private:
     string requestLine;
+<<<<<<< HEAD
     string requestLines;//full 
+=======
+    string requestHeader;//full 
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
     
 public:
     Request(){}
     Request(const Request& rhs) {
         requestLine = rhs.requestLine;
+<<<<<<< HEAD
         requestLines = rhs.requestLines;   }
+=======
+        requestHeader = rhs.requestHeader;
+    }
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
 //    Response(const Response& rhs) {
 //        header = rhs.header;
 //        fulltext = rhs.fulltext;
@@ -35,8 +44,13 @@ public:
     string getRequestLine(){
         return requestLine;
     }
+<<<<<<< HEAD
     string getRequestLines(){
         return requestLines;
+=======
+    string getRequestHeader(){
+        return requestHeader;
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
     }
     // GET http://www.testingmcafeesites.com/index.html HTTP/1.1
         // User-Agent: PostmanRuntime/7.29.0
@@ -54,6 +68,7 @@ public:
 //    client_sockfd=5
     //requestServerInfo:requestLine
     Request(vector<char> header) {
+<<<<<<< HEAD
         requestLines.insert(requestLines.begin(), header.begin(), header.end());
         int pos = requestLines.find("\r\n");
         requestLine = requestLines.substr(0, pos);
@@ -61,6 +76,15 @@ public:
     Request(string line, string header) {
         requestLine.insert(requestLine.begin(), line.begin(), line.end());
         requestLines.insert(requestLines.begin(), header.begin(), header.end());
+=======
+        requestHeader.insert(requestHeader.begin(), header.begin(), header.end());
+        int pos = requestHeader.find("\r\n");
+        requestLine = requestHeader.substr(0, pos);
+    }
+    Request(string line, string header) {
+        requestLine.insert(requestLine.begin(), line.begin(), line.end());
+        requestHeader.insert(requestHeader.begin(), header.begin(), header.end());
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
     }
     string getMethod() {
         int pos = requestLine.find(" ");
@@ -71,6 +95,7 @@ public:
         int p2 = requestLine.find(" ", p1 + 1);
         return requestLine.substr(p1+1, p2-p1-1);
     }
+<<<<<<< HEAD
   string getHost(){
     
     int p1 = getURL().find("http://");
@@ -81,6 +106,9 @@ public:
     }
     else return getURL().substr(p1, p2-p1);
   }    
+=======
+    
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
 };
 
 

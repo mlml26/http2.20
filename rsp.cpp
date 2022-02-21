@@ -61,7 +61,10 @@ bool Response::is_no_cache() {
   if(cc == "") return false;
   int p = cc.find("no-cache");
   if(p == -1) return false;
+<<<<<<< HEAD
   std::cout << "in cache, requires validation" << std::endl;
+=======
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
   return true;
 
 }
@@ -137,4 +140,8 @@ bool Response::isFresh() {
         if(p == -1) return false;
         return true;
     };
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> 381c680ca20c0a02b9bf3d0888ac9f4e7183ba9c
